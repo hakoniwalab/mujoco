@@ -11,7 +11,7 @@ published_at: "2025-02-04 05:49"
 ---
 
 # 📌 前回の振り返り
-[前回の記事](https://zenn.dev/kanetugu2022/articles/8bad51c8d0f3ef)では、TurtleBot3のモデルをMuJoCoで作成しましたが、まだ動作しませんでした。
+[前回の記事](https://zenn.dev/kanetugu2022/articles/mujoco-tb3-modeling)では、TurtleBot3のモデルをMuJoCoで作成しましたが、まだ動作しませんでした。
 
 その理由は、以下の点が不足していたからです。
 ❌ モーターがない → 車輪が駆動しない

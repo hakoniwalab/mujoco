@@ -13,7 +13,7 @@ published_at: "2025-02-03 15:42"
 
 # 🔙 前回のまとめ
 
-[前回の記事](https://zenn.dev/kanetugu2022/articles/1bc075b4a32aa5)では、MuJoCoの基本を学び、バルーンのシミュレーションを通して XMLの記述方法 や 物理特性の調整 を体験しました。最初は浮かなかったバルーンを gravcomp を調整することで、バルーンを浮上させることができましたよね。
+[前回の記事](https://zenn.dev/kanetugu2022/articles/mujoco-intro)では、MuJoCoの基本を学び、バルーンのシミュレーションを通して XMLの記述方法 や 物理特性の調整 を体験しました。最初は浮かなかったバルーンを gravcomp を調整することで、バルーンを浮上させることができましたよね。
 
 今回は、このXMLを改造して、実際のロボット（TurtleBot3）をMuJoCoで再現する ことに挑戦します！
 
@@ -136,4 +136,4 @@ MuJoCoでは、
 
 **「ロボットをシミュレートするには何が必要か？」** を考えながら進めていきましょう！  
 
-👉 **次回：「[MuJoCoでTurtleBot3を動かしてみる！](https://zenn.dev/kanetugu2022/articles/3575a05a46717b)」** をお楽しみに！ 🎮⚙️  
+👉 **次回：「[MuJoCoでTurtleBot3を動かしてみる！](https://zenn.dev/kanetugu2022/articles/mujoco-physics)」** をお楽しみに！ 🎮⚙️  
