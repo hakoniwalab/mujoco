@@ -136,4 +136,4 @@ MuJoCoでは、
 
 **「ロボットをシミュレートするには何が必要か？」** を考えながら進めていきましょう！  
 
-👉 **次回：「[MuJoCoでTurtleBot3を動かしてみる！](https://zenn.dev/kanetugu2022/articles/mujoco-physics)」** をお楽しみに！ 🎮⚙️  
+👉 **次回：「[MuJoCoでTurtleBot3を動かしてみる！](https://zenn.dev/kanetugu2022/articles/mujoco-tb3-physics)」** をお楽しみに！ 🎮⚙️  
