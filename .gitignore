@@ -1,32 +1,39 @@
-# Prerequisites
-*.d
+# CMake build artifacts
+**/CMakeCache.txt
+**/CMakeFiles/
+**/CMakeScripts/
+**/CMakeTmp/
+**/Testing/
+**/Makefile
+**/CMakeLists.txt.user
+**/cmake_install.cmake
+**/install_manifest.txt
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# Build directories (commonly used names)
+**/build/
+**/bin/
+**/lib/
+**/CMakeOutput.log
+**/CMakeError.log
 
-# Precompiled Headers
-*.gch
-*.pch
+# Ninja build system files
+**/.ninja_deps
+**/.ninja_log
+**/build.ninja
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# Qt Creator specific files
+**/CMakeLists.txt.user
 
-# Fortran module files
-*.mod
-*.smod
+# VS Code CMake tools
+**/.vscode/CMakeLists.txt
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+# CLion CMake directories
+**/.idea/
+**/cmake-build-*/
 
-# Executables
-*.exe
-*.out
-*.app
+# Xcode project files
+**/*.pbxproj
+**/*.xcodeproj
+**/*.xcworkspace
+**/*.xcuserstate
+**/*.xcsettings
