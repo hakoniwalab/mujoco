@@ -7,7 +7,7 @@ This repository explains how to integrate the high-precision physics engine MuJo
 - [📖 Unityエンジニアの視点で学ぶMuJoCo入門](https://zenn.dev/kanetugu2022/articles/mujoco-intro)  
 - [⚒️ MuJoCoでTurtleBot3を作ってみる！～ロボットシミュレーションの第一歩～](https://zenn.dev/kanetugu2022/articles/mujoco-tb3-modeling)  
 - [🚀 MuJoCoでTurtleBot3を動かしてみる！～物理特性とアクチュエータの追加～](https://zenn.dev/kanetugu2022/articles/mujoco-tb3-physics)  
-- [💻 MuJoCo C言語のAPIで TurtleBot3 を動かしてみる！](https://zenn.dev/kanetugu2022/articles/mujoco-tb3-physics)
+- [💻 MuJoCo C言語のAPIで TurtleBot3 を動かしてみる！](https://zenn.dev/kanetugu2022/articles/mujoco-tb3-sim-capi)
 
 📝 **今後公開予定の記事**  
 
