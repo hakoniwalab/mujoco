@@ -280,9 +280,9 @@ https://www.youtube.com/watch?v=nr54xT_pD4E
 これで、C言語APIを使ったMuJoCoの基礎がしっかり理解できました！ 🚀
 
 # 🔥 次回予告
-次回は、「OnShape で TurtleBot3 のモデリングをしてみる！」 に挑戦します！ 🛠️✨
+次回は、「OnShape で TurtleBot3 のモデルをもっとリアルにする！」 に挑戦します！ 🛠️✨
 
 💡 「MuJoCo上のTurtleBot3のモデルをもっとリアルに作るには？」
-💡 「CADデータからMuJoCoのXMLへ変換するには？」
+💡 「CADデータをMuJoCoで物理シミュレーションできるようにするには？」
 
-👉 次回：「OnShape で TurtleBot3 のモデリングをしてみる！」 をお楽しみに！ 🎨💻
+👉 次回：「OnShape で TurtleBot3 のモデルをもっとリアルにする！」 をお楽しみに！ 🎨💻

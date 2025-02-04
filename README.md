@@ -11,7 +11,7 @@ This repository explains how to integrate the high-precision physics engine MuJo
 
 📝 **今後公開予定の記事**  
 
-- OnShape で TurtleBot3 のモデリングをしてみる！（Coming soon）
+- OnShape で TurtleBot3 のモデルをもっとリアルにする！（Coming soon）
 - MuJoCo Unity Plugin で TurtleBot3 を動かしてみる！（Coming soon）  
 - 箱庭と Unity と MuJoco を連携して TurtleBot3 を動かしてみる！（Coming soon）  
 
