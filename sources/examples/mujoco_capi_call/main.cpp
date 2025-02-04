@@ -2,12 +2,39 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <thread>
+#include <mutex>
 #include "mujoco_debug.hpp"
+#include "mujoco_viewer.hpp"
 
 // MuJoCoのモデルとデータ
 static mjData* mujoco_data;
 static mjModel* mujoco_model;
 static const std::string model_path = "models/tb3.xml";
+
+// シミュレーションスレッド
+void simulation_thread(mjModel* model, mjData* data, bool& running_flag, std::mutex& mutex) {
+    double simulation_timestep = model->opt.timestep;  // **XMLから `timestep` を取得**
+    std::cout << "[INFO] Simulation timestep: " << simulation_timestep << " sec" << std::endl;
+
+    while (running_flag) {
+        auto start = std::chrono::steady_clock::now();
+
+        {
+            std::lock_guard<std::mutex> lock(mutex);
+            mj_step(model, data);
+        }
+
+        auto end = std::chrono::steady_clock::now();
+        std::chrono::duration<double> elapsed = end - start;
+        double sleep_time = simulation_timestep - elapsed.count();
+
+        if (sleep_time > 0) {
+            std::this_thread::sleep_for(std::chrono::duration<double>(sleep_time));
+        }
+    }
+}
+
 
 int main(int argc, const char* argv[])
 {
@@ -29,20 +56,15 @@ int main(int argc, const char* argv[])
     mj_forward(mujoco_model, mujoco_data);
     
     // **シミュレーションの実行**
-    const int n_steps = 10;
     const double dt = mujoco_model->opt.timestep;
-    std::cout << "[INFO] Starting simulation for " << n_steps << " steps." << std::endl;
+    std::cout << "[INFO] Starting simulation." << std::endl;
     
-    for (int i = 1; i <= n_steps; i++) {
-        std::cout << "[DEBUG] Step: " << i << std::endl;
-        
-        // **モデルの状態更新**
-        mj_step(mujoco_model, mujoco_data);
+    std::mutex data_mutex;
+    bool running_flag = true;
+    std::thread sim_thread(simulation_thread, mujoco_model, mujoco_data, std::ref(running_flag), std::ref(data_mutex));
+    viewer_thread(mujoco_model, mujoco_data, std::ref(running_flag), std::ref(data_mutex));
 
-        // **関節の状態を表示**
-        print_body_state_by_name(mujoco_model, mujoco_data, "tb3_base");
-    }
-
+    sim_thread.join();
     // **リソース解放**
     std::cout << "[INFO] Cleaning up resources." << std::endl;
     mj_deleteData(mujoco_data);

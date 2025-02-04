@@ -4,6 +4,7 @@ add_executable(
     main 
     main.cpp
     ${CMAKE_SOURCE_DIR}/examples/common/mujoco_debug.cpp
+    ${CMAKE_SOURCE_DIR}/examples/common/mujoco_viewer.cpp
 )
 
 #MESSAGE(STATUS "CMAKE_SOURCE_DIR: " ${CMAKE_SOURCE_DIR})
@@ -13,5 +14,8 @@ target_include_directories(main
 
 # MuJoCoライブラリをリンク
 target_link_libraries(main 
-    ${LIBMUJOCO})
-
+    ${LIBMUJOCO}
+   glfw
+    ${OPENGL_gl_LIBRARY}
+    "-framework OpenGL"
+)
