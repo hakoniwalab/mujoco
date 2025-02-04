@@ -22,7 +22,10 @@ void simulation_thread(mjModel* model, mjData* data, bool& running_flag, std::mu
 
         {
             std::lock_guard<std::mutex> lock(mutex);
+            data->ctrl[0] = 0.2;  // 左モーター
+            data->ctrl[1] = 0.5;  // 右モーター
             mj_step(model, data);
+            //print_body_state_by_name(model, data, "tb3_base");
         }
 
         auto end = std::chrono::steady_clock::now();
@@ -63,7 +66,7 @@ int main(int argc, const char* argv[])
     bool running_flag = true;
     std::thread sim_thread(simulation_thread, mujoco_model, mujoco_data, std::ref(running_flag), std::ref(data_mutex));
     viewer_thread(mujoco_model, mujoco_data, std::ref(running_flag), std::ref(data_mutex));
-
+    running_flag = false;
     sim_thread.join();
     // **リソース解放**
     std::cout << "[INFO] Cleaning up resources." << std::endl;

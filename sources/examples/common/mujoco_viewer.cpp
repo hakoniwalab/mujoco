@@ -103,7 +103,7 @@ void viewer_thread(mjModel* model, mjData* data, bool& running_flag, std::mutex&
     mjr_makeContext(model, &con, mjFONTSCALE_150);
 
     mjrRect viewport = {0, 0, 800, 600};
-
+    std::cout << "[INFO] Viewer thread started." << std::endl;
     while (!glfwWindowShouldClose(window)) {
         {
             std::lock_guard<std::mutex> lock(mutex);
@@ -115,10 +115,10 @@ void viewer_thread(mjModel* model, mjData* data, bool& running_flag, std::mutex&
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
     mjr_freeContext(&con);
     mjv_freeScene(&scn);
     glfwDestroyWindow(window);
     glfwTerminate();
+    std::cout << "[INFO] Viewer thread finished." << std::endl;
 }
 
