@@ -61,24 +61,21 @@
       <body name="arm1" pos="0.13 0.13 0" childclass="black">
         <geom name="arm_geom1" type="cylinder" size="0.008 0.077" euler="90 -45 0" density="500"/>
         <!-- プロペラ -->
-        <body name="prop1" pos="0.05 0.05 0.02" childclass="gray" gravcomp="0.0">
-          <joint name="prop1_joint" type="hinge" axis="0 0 1" limited="false"/>
+        <body name="prop1" pos="0.05 0.05 0.02" childclass="gray">
           <geom name="prop1_geom" type="cylinder" size="0.076 0.0025" density="200"/>
         </body>
       </body>
 
       <body name="arm2" pos="0.13 -0.13 0" childclass="black">
         <geom name="arm_geom2" type="cylinder" size="0.008 0.077" euler="90 45 0" density="500"/>
-        <body name="prop2" pos="0.05 -0.05 0.02" childclass="gray" gravcomp="0.0">
-          <joint name="prop2_joint" type="hinge" axis="0 0 1" limited="false"/>
+        <body name="prop2" pos="0.05 -0.05 0.02" childclass="gray">
           <geom name="prop2_geom" type="cylinder" size="0.076 0.0025" density="200"/>
         </body>
       </body>
 
       <body name="arm3" pos="-0.13 0.13 0" childclass="black">
         <geom name="arm_geom3" type="cylinder" size="0.008 0.077" euler="90 45 0" density="500"/>
-        <body name="prop3" pos="-0.05 0.05 0.02" childclass="gray" gravcomp="0.0">
-          <joint name="prop3_joint" type="hinge" axis="0 0 1" limited="false"/>
+        <body name="prop3" pos="-0.05 0.05 0.02" childclass="gray">
           <geom name="prop3_geom" type="cylinder" size="0.076 0.0025" density="200"/>
         </body>
       </body>
@@ -86,25 +83,11 @@
       <body name="arm4" pos="-0.13 -0.13 0" childclass="black">
         <geom name="arm_geom4" type="cylinder" size="0.008 0.077" euler="90 -45 0" density="500"/>
         <body name="prop4" pos="-0.05 -0.05 0.02" childclass="gray" gravcomp="0.0">
-          <joint name="prop4_joint" type="hinge" axis="0 0 1" limited="false"/>
           <geom name="prop4_geom" type="cylinder" size="0.076 0.0025" density="200"/>
         </body>
       </body>
     </body>
   </worldbody>
-  <actuator>
-    <!-- 右上プロペラ（時計回り + 上向き推力） -->
-    <motor name="prop1_motor" joint="prop1_joint" gear="1.0"/>
-
-    <!-- 左上プロペラ（反時計回り + 上向き推力） -->
-    <motor name="prop2_motor" joint="prop2_joint" gear="-1.0"/>
-
-    <!-- 右下プロペラ（反時計回り + 上向き推力） -->
-    <motor name="prop3_motor" joint="prop3_joint" gear="-1.0"/>
-
-    <!-- 左下プロペラ（時計回り + 上向き推力） -->
-    <motor name="prop4_motor" joint="prop4_joint" gear="1.0"/>
-  </actuator>
 
 
 </mujoco>

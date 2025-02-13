@@ -70,6 +70,14 @@ void simulation_thread(mjModel* model, mjData* data, bool& running_flag, std::mu
 
         {
             std::lock_guard<std::mutex> lock(mutex);
+            prop_thrust[0] = 1.2;
+            prop_thrust[1] = 1.2;
+            prop_thrust[2] = 1.2;
+            prop_thrust[3] = 1.2;
+            prop_torque[0] = 0.01;
+            prop_torque[1] = 0.0;
+            prop_torque[2] = 0.0;
+            prop_torque[3] = 0.0;
             mj_step(model, data);
         }
 
