@@ -1,0 +1,110 @@
+<mujoco>
+  <option timestep="0.02" density="1.204" viscosity="1.8e-5" integrator="implicit"/>
+  <option gravity="0 0 -9.81"/>
+  <visual>
+    <global elevation="-10"/>
+  </visual>
+  <default>
+    <tendon limited="true" width="0.003" rgba="1 1 1 1"/>
+    <geom friction=".2"/>
+    <default class="weight">
+      <geom rgba=".8 .4 .8 1"/>
+      <site rgba=".8 .4 .8 1"/>
+    </default>
+    <default class="drone">
+      <geom density="0.167" fluidshape="ellipsoid"/>
+      <default class="pink">
+        <geom rgba="1 .6 .7 1"/>
+        <site rgba="1 .6 .7 1"/>
+      </default>
+      <default class="blue">
+        <geom rgba=".3 .7 .9 1"/>
+        <site rgba=".3 .7 .9 1"/>
+      </default>
+      <default class="black">
+        <geom rgba="0 0 0 1"/>
+        <site rgba="0 0 0 1"/>
+      </default>
+      <default class="gray">
+        <geom rgba=".5 .5 .5 1"/>
+        <site rgba=".5 .5 .5 1"/>
+      </default>
+      <default class="green">
+        <geom rgba=".4 .9 .5 1"/>
+        <site rgba=".4 .9 .5 1"/>
+      </default>
+      <default class="orange">
+        <geom rgba="1 .4 0 1"/>
+        <site rgba="1 .4 0 1"/>
+      </default>
+    </default>
+  </default>
+  <asset>
+    <!-- 白いテクスチャを設定 -->
+    <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1="1 1 1" rgb2="1 1 1"/>
+    
+    <!-- マテリアル（白色）を設定 -->
+    <material name="white_ground" texture="grid" reflectance="0"/>
+  </asset>
+  <worldbody>
+    <!-- 環境光（全体の明るさを調整） -->
+    <light diffuse="1 1 1" specular="0.5 0.5 0.5" pos="0 0 5"/>
+    <!-- 地面の設定（白色にする） -->
+    <geom name="ground" type="plane" size="5 5 .05" pos="0 0 -.5" material="white_ground"/>
+
+    <!-- 本体（ベース） -->
+    <body name="drone_base" pos="0 0 0.0" childclass="gray">
+      <freejoint/>
+      <geom name="base" type="box" size="0.077 0.077 0.015" density="500"/>
+      
+      <!-- 右上のアーム -->
+      <body name="arm1" pos="0.13 0.13 0" childclass="black">
+        <geom name="arm_geom1" type="cylinder" size="0.008 0.077" euler="90 -45 0" density="500"/>
+        <!-- プロペラ -->
+        <body name="prop1" pos="0.05 0.05 0.02" childclass="gray" gravcomp="0.0">
+          <joint name="prop1_joint" type="hinge" axis="0 0 1" limited="false"/>
+          <geom name="prop1_geom" type="cylinder" size="0.076 0.0025" density="200"/>
+        </body>
+      </body>
+
+      <body name="arm2" pos="0.13 -0.13 0" childclass="black">
+        <geom name="arm_geom2" type="cylinder" size="0.008 0.077" euler="90 45 0" density="500"/>
+        <body name="prop2" pos="0.05 -0.05 0.02" childclass="gray" gravcomp="0.0">
+          <joint name="prop2_joint" type="hinge" axis="0 0 1" limited="false"/>
+          <geom name="prop2_geom" type="cylinder" size="0.076 0.0025" density="200"/>
+        </body>
+      </body>
+
+      <body name="arm3" pos="-0.13 0.13 0" childclass="black">
+        <geom name="arm_geom3" type="cylinder" size="0.008 0.077" euler="90 45 0" density="500"/>
+        <body name="prop3" pos="-0.05 0.05 0.02" childclass="gray" gravcomp="0.0">
+          <joint name="prop3_joint" type="hinge" axis="0 0 1" limited="false"/>
+          <geom name="prop3_geom" type="cylinder" size="0.076 0.0025" density="200"/>
+        </body>
+      </body>
+
+      <body name="arm4" pos="-0.13 -0.13 0" childclass="black">
+        <geom name="arm_geom4" type="cylinder" size="0.008 0.077" euler="90 -45 0" density="500"/>
+        <body name="prop4" pos="-0.05 -0.05 0.02" childclass="gray" gravcomp="0.0">
+          <joint name="prop4_joint" type="hinge" axis="0 0 1" limited="false"/>
+          <geom name="prop4_geom" type="cylinder" size="0.076 0.0025" density="200"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <actuator>
+    <!-- 右上プロペラ（時計回り + 上向き推力） -->
+    <motor name="prop1_motor" joint="prop1_joint" gear="1.0"/>
+
+    <!-- 左上プロペラ（反時計回り + 上向き推力） -->
+    <motor name="prop2_motor" joint="prop2_joint" gear="-1.0"/>
+
+    <!-- 右下プロペラ（反時計回り + 上向き推力） -->
+    <motor name="prop3_motor" joint="prop3_joint" gear="-1.0"/>
+
+    <!-- 左下プロペラ（時計回り + 上向き推力） -->
+    <motor name="prop4_motor" joint="prop4_joint" gear="1.0"/>
+  </actuator>
+
+
+</mujoco>
