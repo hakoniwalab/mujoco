@@ -6,6 +6,7 @@
 #include <string>
 #include <thread>
 #include <mutex>
+#include <vector>
 
 // MuJoCoのモデルとデータ
 static mjModel* mujoco_model;
@@ -16,8 +17,8 @@ static std::mutex data_mutex;
 
 // プロペラの制御設定
 const char* prop_names[] = {"prop1", "prop2", "prop3", "prop4"};
-const double thrust_coeff = 2.0;
-const double torque_coeff = 0.1;
+std::vector<double> prop_thrust(4, 0.0);
+std::vector<double> prop_torque(4, 0.0);
 
 // **mjcb_control コールバック関数**
 void my_control_callback(const mjModel* model, mjData* data) {
@@ -32,8 +33,8 @@ void my_control_callback(const mjModel* model, mjData* data) {
         //std::cout << "[INFO] Applying control to: " << prop_names[i] << std::endl;
 
         // ボディ座標系での推力とトルク
-        double F_body[3] = {0, 0, thrust_coeff};  // Z軸方向推力
-        double T_body[3] = {0, 0, (i % 2 == 0) ? torque_coeff : -torque_coeff}; // 偶数は時計回り、奇数は反時計回り
+        double F_body[3] = {0, 0, prop_thrust[i]};  // Z軸方向推力
+        double T_body[3] = {0, 0, prop_torque[i]}; // 偶数は時計回り、奇数は反時計回り
 
         // ワールド座標系の回転行列（3×3）
         double* R = data->xmat + 9 * body_id;
