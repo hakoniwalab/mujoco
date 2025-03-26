@@ -23,13 +23,21 @@ std::vector<double> prop_torque(4, 0.0);
 // **mjcb_control コールバック関数**
 void my_control_callback(const mjModel* model, mjData* data) {
     //std::lock_guard<std::mutex> lock(data_mutex);
+    mju_zero(data->qfrc_applied, model->nv);
 
     for (int i = 0; i < 4; i++) {
-        int body_id = mj_name2id(model, mjOBJ_BODY, prop_names[i]);
-        if (body_id == -1) {
+        int prop_id = mj_name2id(model, mjOBJ_BODY, prop_names[i]);
+        if (prop_id == -1) {
             std::cerr << "[ERROR] Body not found: " << prop_names[i] << std::endl;
             continue;
         }
+            // ワールド座標でのプロペラ位置
+            double prop_pos[3] = {
+                data->xpos[prop_id * 3 + 0],  
+                data->xpos[prop_id * 3 + 1],  
+                data->xpos[prop_id * 3 + 2]
+            };
+
         //std::cout << "[INFO] Applying control to: " << prop_names[i] << std::endl;
 
         // ボディ座標系での推力とトルク
@@ -37,7 +45,7 @@ void my_control_callback(const mjModel* model, mjData* data) {
         double T_body[3] = {0, 0, prop_torque[i]}; // 偶数は時計回り、奇数は反時計回り
 
         // ワールド座標系の回転行列（3×3）
-        double* R = data->xmat + 9 * body_id;
+        double* R = data->xmat + 9 * prop_id;
 
         // ボディ座標系 → ワールド座標系変換
         double F_world[3] = {
@@ -53,32 +61,93 @@ void my_control_callback(const mjModel* model, mjData* data) {
         };
 
         // `xfrc_applied` に適用
-        for (int j = 0; j < 3; j++) {
-            data->xfrc_applied[body_id * 6 + j] = F_world[j];
-            data->xfrc_applied[body_id * 6 + 3 + j] = T_world[j];
-        }
+        //std::cout << "body_id: " << body_id << std::endl;
+        // `mj_applyFT()` を使用して、プロペラの位置に推力を適用
+        mj_applyFT(model, data, F_world, T_world, prop_pos, prop_id, data->qfrc_applied);
     }
 }
+#include <iostream>
+#include <cmath>
+
+// クォータニオンをオイラー角 (roll, pitch, yaw) に変換する関数
+void quatToEuler(const double quat[4], double euler[3]) {
+    // クォータニオンの成分
+    double w = quat[0];
+    double x = quat[1];
+    double y = quat[2];
+    double z = quat[3];
+
+    // Roll (X軸回転)
+    double sinr_cosp = 2.0 * (w * x + y * z);
+    double cosr_cosp = 1.0 - 2.0 * (x * x + y * y);
+    euler[0] = std::atan2(sinr_cosp, cosr_cosp);
+
+    // Pitch (Y軸回転)
+    double sinp = 2.0 * (w * y - z * x);
+    if (std::abs(sinp) >= 1)
+        euler[1] = std::copysign(M_PI / 2, sinp); // 角度範囲を [-90, 90] に制限
+    else
+        euler[1] = std::asin(sinp);
+
+    // Yaw (Z軸回転)
+    double siny_cosp = 2.0 * (w * z + x * y);
+    double cosy_cosp = 1.0 - 2.0 * (y * y + z * z);
+    euler[2] = std::atan2(siny_cosp, cosy_cosp);
+}
+
+
 
 // **シミュレーションスレッド**
 void simulation_thread(mjModel* model, mjData* data, bool& running_flag, std::mutex& mutex) {
     double simulation_timestep = model->opt.timestep;
     std::cout << "[INFO] Simulation timestep: " << simulation_timestep << " sec" << std::endl;
 
+    auto body_id = mj_name2id(model, mjOBJ_BODY, "drone_base");
+    auto jnt_id = model->body_jntadr[body_id];
+    auto qpos_index = mujoco_model->jnt_qposadr[jnt_id];
+    auto dof_index = mujoco_model->jnt_dofadr[jnt_id];
     while (running_flag) {
         auto start = std::chrono::steady_clock::now();
 
         {
             std::lock_guard<std::mutex> lock(mutex);
-            prop_thrust[0] = 1.2;
-            prop_thrust[1] = 1.2;
-            prop_thrust[2] = 1.2;
-            prop_thrust[3] = 1.2;
-            prop_torque[0] = 0.01;
-            prop_torque[1] = 0.0;
-            prop_torque[2] = 0.0;
-            prop_torque[3] = 0.0;
+            prop_thrust[0] = 1.5;
+            prop_thrust[1] = 1.51;
+            prop_thrust[2] = 1.5;
+            prop_thrust[3] = 1.51;
+            prop_torque[0] = -0.00;
+            prop_torque[1] = -0.00;
+            prop_torque[2] = -0.0;
+            prop_torque[3] = -0.0;
             mj_step(model, data);
+
+            // データの表示
+            // 位置
+            std::cout << "Position: ";
+            for (int i = 0; i < 3; i++) {
+                std::cout << std::fixed << std::setprecision(3) << data->qpos[i] << " ";
+            }
+            std::cout << std::endl;
+            // 速度
+            std::cout << std::endl;
+            std::cout << "Velocity2: ";
+            for (int i = 0; i < 3; i++) {
+                std::cout << std::fixed << std::setprecision(3) << data->qvel[dof_index + i] << " ";
+            }
+            std::cout << std::endl;
+            //角度
+            // 1. クォータニオンの取得
+            // d->qposからボディの回転（クォータニオン）を取得
+            // 通常、qposの最初の3要素は位置(x,y,z)で、次の4要素が回転のクォータニオン(w,x,y,z)
+            mjtNum* quat = data->qpos + qpos_index + 3;  // body_idは対象のボディのID
+            double euler[3];
+            quatToEuler(quat, euler);
+
+            std::cout << "Orientation: ";
+            for (int i = 0; i < 3; i++) {
+                std::cout << std::fixed << std::setprecision(3) << euler[i] << " ";
+            }
+            std::cout << std::endl;
         }
 
         auto end = std::chrono::steady_clock::now();

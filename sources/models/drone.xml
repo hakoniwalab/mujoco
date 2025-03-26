@@ -1,5 +1,5 @@
 <mujoco>
-  <option timestep="0.02" density="1.204" viscosity="1.8e-5" integrator="implicit"/>
+  <option timestep="0.001" density="1.204" viscosity="0.05" integrator="Euler"/>
   <option gravity="0 0 -9.81"/>
   <visual>
     <global elevation="-10"/>
@@ -12,7 +12,7 @@
       <site rgba=".8 .4 .8 1"/>
     </default>
     <default class="drone">
-      <geom density="0.167" fluidshape="ellipsoid"/>
+      <geom density="0.167" fluidshape="ellipsoid" friction="0.5 0.5 0.5"/>
       <default class="pink">
         <geom rgba="1 .6 .7 1"/>
         <site rgba="1 .6 .7 1"/>
@@ -50,44 +50,87 @@
     <!-- 環境光（全体の明るさを調整） -->
     <light diffuse="1 1 1" specular="0.5 0.5 0.5" pos="0 0 5"/>
     <!-- 地面の設定（白色にする） -->
-    <geom name="ground" type="plane" size="5 5 .05" pos="0 0 -.5" material="white_ground"/>
+    <geom name="ground" type="plane" size="5 5 .01" pos="0 0 0" material="white_ground"/>
 
     <!-- 本体（ベース） -->
-    <body name="drone_base" pos="0 0 0.0" childclass="gray">
+    <body name="drone_base" pos="0 0 1.0" childclass="gray">
       <freejoint/>
-      <geom name="base" type="box" size="0.077 0.077 0.015" density="500"/>
-      
-      <!-- 右上のアーム -->
-      <body name="arm1" pos="0.13 0.13 0" childclass="black">
-        <geom name="arm_geom1" type="cylinder" size="0.008 0.077" euler="90 -45 0" density="500"/>
-        <!-- プロペラ -->
-        <body name="prop1" pos="0.05 0.05 0.02" childclass="gray">
+      <geom name="base" type="box" size="0.07 0.07 0.015" density="810"/>
+      <site name="drone_attach" pos="0 0 -0.05" size="0.005" rgba="1 1 0 1"/>
+
+      <body name="arm1" pos="0.13 -0.13 0" childclass="black">
+        <geom name="arm_geom1" type="cylinder" size="0.008 0.077" euler="90 45 0" density="500"/>
+        <body name="p1" pos="0.05 -0.05 0.02" childclass="gray">
           <geom name="prop1_geom" type="cylinder" size="0.076 0.0025" density="200"/>
         </body>
       </body>
-
-      <body name="arm2" pos="0.13 -0.13 0" childclass="black">
+      <body name="prop1" pos="0.18 -0.18 0.02" childclass="black">
+        <geom name="p1_geom" type="box" size="0.007 0.007 0.007" density="500"/>
+      </body>
+      <body name="arm2" pos="-0.13 0.13 0" childclass="black">
         <geom name="arm_geom2" type="cylinder" size="0.008 0.077" euler="90 45 0" density="500"/>
-        <body name="prop2" pos="0.05 -0.05 0.02" childclass="gray">
+        <body name="p2" pos="-0.05 0.05 0.02" childclass="gray" gravcomp="0.0">
           <geom name="prop2_geom" type="cylinder" size="0.076 0.0025" density="200"/>
         </body>
       </body>
+      <body name="prop2" pos="-0.18 0.18 0.02" childclass="black">
+        <geom name="p2_geom" type="box" size="0.007 0.007 0.007" density="500"/>
+      </body>
 
-      <body name="arm3" pos="-0.13 0.13 0" childclass="black">
-        <geom name="arm_geom3" type="cylinder" size="0.008 0.077" euler="90 45 0" density="500"/>
-        <body name="prop3" pos="-0.05 0.05 0.02" childclass="gray">
+      <body name="arm3" pos="0.13 0.13 0" childclass="black">
+        <geom name="arm_geom3" type="cylinder" size="0.008 0.077" euler="90 -45 0" density="500"/>
+        <body name="p3" pos="0.05 0.05 0.02" childclass="gray">
           <geom name="prop3_geom" type="cylinder" size="0.076 0.0025" density="200"/>
         </body>
+      </body>
+      <body name="prop3" pos="0.18 0.18 0.02" childclass="black">
+        <geom name="p3_geom" type="box" size="0.007 0.007 0.007" density="500"/>
       </body>
 
       <body name="arm4" pos="-0.13 -0.13 0" childclass="black">
         <geom name="arm_geom4" type="cylinder" size="0.008 0.077" euler="90 -45 0" density="500"/>
-        <body name="prop4" pos="-0.05 -0.05 0.02" childclass="gray" gravcomp="0.0">
+        <body name="p4" pos="-0.05 -0.05 0.02" childclass="gray">
           <geom name="prop4_geom" type="cylinder" size="0.076 0.0025" density="200"/>
         </body>
       </body>
+      <body name="prop4" pos="-0.18 -0.18 0.02" childclass="black">
+        <geom name="p4_geom" type="box" size="0.007 0.007 0.007" density="500"/>
+      </body>
+
+      <body name="reg1" pos="-0.05 0.05 -0.10" childclass="black">
+        <geom name="reg_geom1" type="cylinder" size="0.008 0.077" euler="20 0 0" density="500"/>
+      </body>
+      <body name="reg2" pos="0.05 0.05 -0.10" childclass="black">
+        <geom name="reg_geom2" type="cylinder" size="0.008 0.077" euler="20 0 0" density="500"/>
+      </body>
+      <body name="reg3" pos="-0.05 -0.05 -0.10" childclass="black">
+        <geom name="reg_geom3" type="cylinder" size="0.008 0.077" euler="-20 0 0" density="500"/>
+      </body>
+      <body name="reg4" pos="0.05 -0.05 -0.10" childclass="black">
+        <geom name="reg_geom4" type="cylinder" size="0.008 0.077" euler="-20 0 0" density="500"/>
+      </body>
+
     </body>
+    <!-- 荷物（box） -->
+    <body name="box" pos="0 0.2 0.5">
+      <freejoint/>
+      <geom name="box_geom" type="box" size="0.03 0.03 0.02" density="500" rgba="1 0 0 1"/>
+
+      <!-- 荷物上部の接続ポイント -->
+      <site name="box_attach" pos="0 0 0.02" size="0.002" rgba="1 1 0 1"/>
+    </body>
+
+
   </worldbody>
 
+  <!-- ドローンと荷物をつなぐ糸 -->
+  <!--
+  <tendon>
+    <spatial name="cargo_tether" limited="true" range="0.1 0.3" springlength="0.2" stiffness="10.0" damping="0.1">
+      <site site="drone_attach"/>
+      <site site="box_attach"/>
+    </spatial>
+  </tendon>
+  -->
 
 </mujoco>
