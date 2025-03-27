@@ -23,3 +23,4 @@ find_package(glfw3 REQUIRED)   # GLFW を探す
 
 add_subdirectory(examples/mujoco_capi_call)
 add_subdirectory(examples/mujoco_drone)
+add_subdirectory(examples/forklift)
