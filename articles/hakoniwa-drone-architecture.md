@@ -8,7 +8,7 @@ topics:
   - "ardupilot"
   - "hakoniwa"
 published: true
-published_at: "2025-05-25 7:20"
+published_at: "2025-05-25 07:20"
 ---
 
 > この記事は、[Qiita](https://qiita.com/kanetugu2018/items/9ce565ad7a47fcb71800)に投稿した内容をZenn向けに再構成し、より思想的背景に重点を置いて再掲載したものです。
