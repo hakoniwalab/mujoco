@@ -1,12 +1,11 @@
 ---
-title: "国産シミュレータ『箱庭』の思想と仕組み 〜PX4/ArduPilot対応を支えるアーキテクチャ〜"
+title: "国産シミュレータ箱庭の思想と仕組み - PX4/ArduPilot対応のアーキテクチャ解説"
 emoji: ""
 type: "tech"
 topics:
   - "unity"
   - "px4"
   - "ardupilot"
-  - "ros2"
   - "hakoniwa"
 published: true
 published_at: "2025-05-25 7:20"
